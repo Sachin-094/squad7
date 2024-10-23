@@ -1,0 +1,55 @@
+name: Terraform fmt and validate
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+
+jobs:
+  fmt-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: '1.3.5'   
+ # Replace with your desired Terraform version
+      - name: Terraform fmt
+        run: terraform fmt -check
+      - name: Terraform validate
+        run: terraform validate
+
+name: Terraform plan
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version:   
+ '1.3.5' # Replace with your desired Terraform version
+      - name: Terraform plan
+        run: terraform plan
+
+
+name: Terraform apply on merge
+
+on:
+  push:
+    branches: [main]
+    types: [push]
+        jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: '1.3.5' # Replace with your desired Terraform version
+      - name: Terraform apply
+        run: terraform apply -auto-approve
